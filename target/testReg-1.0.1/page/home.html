@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>后台管理系统</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"> 
+	
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+	<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+
+   <!-- 内容区域 -->
+            <!-- 内容头部 -->
+            <section class="content-header">
+                <h1>
+                    控制面板
+                    <small>首页</small>
+                </h1>
+            </section>
+            <!-- 内容头部 /-->
+
+            <!-- 正文区域 -->
+            <section class="content">
+
+                <!-- 统计数值 -->
+                <div class="row">
+                    <div class="col-lg-3 col-xs-6">
+                        <!-- small box -->
+                        <div class="small-box bg-aqua">
+                            <div class="inner">
+                                <h3>150</h3>
+
+                                <p>新订单</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="all-order-manage-list.html" class="small-box-footer" target="iframe">
+                                <i class="fa fa-arrow-circle-right"></i>详细
+                            </a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-xs-6">
+                        <!-- small box -->
+                        <div class="small-box bg-green">
+                            <div class="inner">
+                                <h3>53<sup style="font-size: 20px">%</sup></h3>
+                                <p>全功能表单</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="all-tables-data.html" class="small-box-footer">详细 <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-xs-6">
+                        <!-- small box -->
+                        <div class="small-box bg-yellow">
+                            <div class="inner">
+                                <h3>44</h3>
+
+                                <p>新注册用户</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person-add"></i>
+                            </div>
+                            <a href="seller_1.html" class="small-box-footer" target="iframe">
+                                <i class="fa fa-arrow-circle-right"></i>详细
+                            </a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-xs-6">
+                        <!-- small box -->
+                        <div class="small-box bg-red">
+                            <div class="inner">
+                                <h3>65</h3>
+
+                                <p>日PV</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div>
+                            <a href="seller_1.html" class="small-box-footer" target="iframe">
+                                <i class="fa fa-arrow-circle-right"></i>详细
+                            </a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+
+                    单张图片压缩：<input id="img" name="image" placeholder="请输入图片地址">  <button onclick="img()">压缩</button> <br>
+                    文件夹图片压缩：<input id="imgs" name="images" placeholder="请输入文件夹地址">  <button onclick="imgs()">压缩</button>
+                    <button type="button" class="btn btn-default" title="新建" data-toggle="modal"
+                            data-target="#editModal"><i class="fa fa-file-o"></i> 新建
+                    </button>
+
+                    <hr/>
+                    文件上传：
+                    <form action="/login/file.do" method="post" enctype="multipart/form-data">
+                        选择文件：
+                        <input type="file" name="file" id="file">
+                        <input type="submit" value="提交">
+                    </form>
+
+                    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h3 id="myModalLabel">品牌编辑</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-bordered table-striped" width="800px">
+                                        <tr>
+                                            <td>品牌名称</td>
+                                            <td><input id="brandname" class="form-control" placeholder="品牌名称"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>首字母</td>
+                                            <td><input id="brandfir" class="form-control" placeholder="首字母"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">保存</button>
+                                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true" onclick="shutdown()">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+            </section>
+            <!-- 正文区域 /-->
+
+        <!-- 内容区域 /-->
+</body>
+<script>
+    function img() {
+        var img  = $("#img").val();
+        $.ajax({
+            type:'post',
+            url:'http://localhost:8074/login/img.do',
+            data:{
+                image:img
+            },
+            success:function (data) {
+                if (data){
+                    alert(data)
+                }
+            }
+        })
+    }
+    function imgs() {
+        var imgs  = $("#imgs").val();
+        alert(imgs);
+    }
+    function ToFile() {
+        alert(imgs);
+    }
+</script>
+</html>

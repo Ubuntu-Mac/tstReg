@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qul.dao.UserDao">
+
+    <resultMap id="UserMap" type="com.qul.pojo.User">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="gender" property="gender"/>
+        <result column="address" property="address"/>
+        <result column="tel" property="tel"/>
+        <result column="email" property="email"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="last_login_time" property="lastLoginTime"/>
+        <result column="error_password_time" property="errorPasswordTime"/>
+        <result column="error_count" property="errorCount"/>
+        <result column="status" property="status"/>
+        <result column="freeze" property="freeze"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="UserMap">
+        SELECT * from user
+    </select>
+
+    <select id="findOne" parameterType="int" resultMap="UserMap">
+        SELECT * from user WHERE id=#{id}
+    </select>
+
+    <select id="checkUsernameIsRepeat" parameterType="string" resultMap="UserMap">
+        SELECT count(*) from user where username=#{username}
+    </select>
+
+    <select id="findByUsername" parameterType="string" resultMap="UserMap">
+        SELECT * from USER where username=#{username}
+    </select>
+
+    <insert id="add" parameterType="com.qul.pojo.User">
+        INSERT into user (name,gender,address,tel,email,username,password) VALUES (#{name},#{gender},#{address},#{tel},#{email},#{username},#{password})
+    </insert>
+
+    <update id="save" parameterType="com.qul.pojo.User">
+        UPDATE USER SET name=#{name},gender=#{gender},address=#{address},tel=#{tel},email=#{email},last_login_time=#{lastLoginTime},username=#{username}
+        ,password=#{password},error_password_time=#{errorPasswordTime},status=#{status},error_count=#{errorCount},freeze=#{freeze}
+        WHERE id =#{id}
+    </update>
+</mapper>

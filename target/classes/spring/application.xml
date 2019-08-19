@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--加载配置文件-->
+    <context:property-placeholder location="classpath*:properties/db.properties"></context:property-placeholder>
+
+    <!--配置扫描的包-->
+    <context:component-scan base-package="com.qul">
+        <!--配置不扫描的包-->
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    <!--配置数据库-->
+    <!-- 数据库连接池 -->
+    <!-- 加载配置文件 -->
+    <context:property-placeholder location="classpath*:properties/*.properties" />
+    <!-- 数据库连接池 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          destroy-method="close">
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="maxActive" value="10" />
+        <property name="minIdle" value="5" />
+    </bean>
+
+    <!-- 让spring管理sqlsessionfactory 使用mybatis和spring整合包中的 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 数据库连接池 -->
+        <property name="dataSource" ref="dataSource" />
+        <!-- 加载mybatis的全局配置文件 -->
+        <property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml" />
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.qul.dao" />
+    </bean>
+
+
+
+
+
+
+    <!--&lt;!&ndash; job &ndash;&gt;
+    <bean id="Job1Demo" class="com.qul.quartz.Job1Demo"/>
+    &lt;!&ndash; 使用MethodInvokingJobDetailFactoryBean，任务类可以不实现Job接口，通过targetMethod指定调用方法&ndash;&gt;
+    &lt;!&ndash; jobDetail &ndash;&gt;
+    <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="Job1Demo"/>
+        <property name="targetMethod" value="sayHello"/>
+        &lt;!&ndash;false表示等上一个任务执行完后再开启新的任务,这里和上一遍博客中的注解@DisallowConcurrentExecution一个道理&ndash;&gt;
+        <property name="concurrent" value="false"/>
+    </bean>
+    &lt;!&ndash; Trigger&ndash;&gt;
+    <bean id="helloWordJobCronTrigger1" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="jobDetail"/>
+        <property name="cronExpression" value="0/3 * * * * ?"/>
+    </bean>
+    &lt;!&ndash;Scheduler &ndash;&gt;
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="helloWordJobCronTrigger1"/>
+            </list>
+        </property>
+    </bean>
+
+    &lt;!&ndash; job &ndash;&gt;
+    <bean id="Job2Demo" class="com.qul.quartz.Job2Demo"/>
+    &lt;!&ndash; 使用MethodInvokingJobDetailFactoryBean，任务类可以不实现Job接口，通过targetMethod指定调用方法&ndash;&gt;
+    &lt;!&ndash; jobDetail &ndash;&gt;
+    <bean id="jobDetail2" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="Job2Demo"/>
+        <property name="targetMethod" value="sayHello"/>
+        &lt;!&ndash;false表示等上一个任务执行完后再开启新的任务,这里和上一遍博客中的注解@DisallowConcurrentExecution一个道理&ndash;&gt;
+        <property name="concurrent" value="false"/>
+    </bean>
+    &lt;!&ndash; Trigger&ndash;&gt;
+    <bean id="helloWordJobCronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="jobDetail2"/>
+        <property name="cronExpression" value="0/6 * * * * ?"/>
+    </bean>
+    &lt;!&ndash;Scheduler &ndash;&gt;
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="helloWordJobCronTrigger2"/>
+            </list>
+        </property>
+    </bean>-->
+</beans>

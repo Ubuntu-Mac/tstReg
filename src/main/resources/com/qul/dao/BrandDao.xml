@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qul.dao.BrandDao">
+    <select id="findAll" resultType="com.qul.pojo.Brand">
+        select * from brand
+    </select>
+
+    <select id="findOne" parameterType="java.lang.Long" resultType="com.qul.pojo.Brand">
+        select * from brand WHERE id=#{id}
+    </select>
+
+    <select id="search" parameterType="com.qul.pojo.Brand" resultType="com.qul.pojo.Brand">
+        select * from brand
+        <where>
+            <if test="name != '' and name !=null ">
+                and name LIKE "%"#{name}"%"
+            </if>
+            <if test="firstChar != '' and firstChar !=null ">
+                and firstChar LIKE "%"#{firstChar}"%"
+            </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.qul.pojo.Brand">
+        insert into brand (name,firstChar) value (#{name},#{firstChar})
+    </insert>
+
+    <update id="update" parameterType="com.qul.pojo.Brand">
+        UPDATE brand set name=#{name},firstChar=#{firstChar} where id=#{id}
+    </update>
+
+    <delete id="del" parameterType="java.lang.Long">
+        DELETE FROM brand where id=#{id}
+    </delete>
+</mapper>

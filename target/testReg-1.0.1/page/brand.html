@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>品牌管理</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../plugins/sjquery/jquery.sPage.css">
+    <script src="../plugins/sjquery/jquery.sPage.js"></script>
+
+    <script>
+        $(function () {
+            suarch();
+            var size
+        });
+        function shutdown() {
+            location.reload();
+        }
+        function findOne(id) {
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:8074/brand/findOne.do?id='+id,
+                success:function (data) {
+                    $("#id").val(data.id)
+                    $("#brandname").val(data.name)
+                    $("#brandfir").val(data.firstChar)
+                }
+            })
+        }
+        function seva() {
+            var id = $("#id").val();
+            var brand=[];
+            if (id==''){
+                brand={
+                    name:$("#brandname").val(),
+                    firstChar:$("#brandfir").val()
+                };
+                //新增
+                $.ajax({
+                    type: 'post',
+                    url: 'http://localhost:8074/brand/save.do',
+                    dataType:'json',
+                    contentType:"application/json;charset=UTF-8",
+                    data:JSON.stringify(brand),
+                    success:function (data) {
+                        alert(data.msg);
+                        location.reload();
+                    }
+                })
+            } else {
+                brand={
+                    id:id,
+                    name:$("#brandname").val(),
+                    firstChar:$("#brandfir").val()
+                };
+                $.ajax({
+                    type: 'post',
+                    url: 'http://localhost:8074/brand/update.do',
+                    dataType:'json',
+                    contentType:"application/json;charset=UTF-8",
+                    data:JSON.stringify(brand),
+                    success:function (data) {
+                        alert(data.msg);
+                        location.reload();
+                    }
+                })
+            }
+        }
+        var ids=[];
+        function addCheckBox(id) {
+            if (event.target.checked){
+                ids.push(id)
+            } else {
+                var indexOf = ids.indexOf(id);
+                //从数组中删除被选中的id
+                ids.splice(indexOf, 1);
+            }
+        }
+        function del() {
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:8074/brand/del.do?ids='+ids,
+                success:function (data) {
+                    alert(data.msg);
+                    location.reload();
+                }
+            })
+        }
+        function suarch(page,size) {
+            var brand=[];
+            var p = page || 1;
+            var size= size || 10;
+            brand={
+                name:$("#searchName").val(),
+                firstChar:$("#searchFir").val()
+            };
+            $.ajax({
+                type: 'post',
+                url: 'http://localhost:8074/brand/search.do?page='+p+'&size='+size,
+                dataType:'json',
+                contentType:"application/json;charset=UTF-8",
+                data: JSON.stringify(brand),
+                success:function (data) {
+                    if (data) {
+                        var trs = '';
+                        $.each(data.rows, function (n, value) {
+                            trs += '   <tr>\n' +
+                                '      <td><input  type="checkbox" onclick="addCheckBox('+value.id+')"></td> \n' +
+                                '      <td >'+value.id+'</td>\n' +
+                                '      <td >'+value.name+'</td>\n' +
+                                '      <td >'+value.firstChar+'</td>\n' +
+                                '      <td class="text-center">  \n' +
+                                '               <button onclick="findOne('+value.id+')" type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal"  >修改</button>                                           \n' +
+                                '      </td>\n' +
+                                '      </tr>';
+                        });
+                        $('#data').html(trs);
+                    }
+
+                    // 示例1
+                    $("#myPage").sPage({
+                        page:data.pageNum,//当前页码，必填
+                        total:data.total,//数据总条数，必填
+                        pageSize:size,//每页显示多少条数据，默认10条
+                        showTotal:true,//是否显示总条数，默认关闭：false
+                        totalTxt:"共{total}条",//数据总条数文字描述，{total}为占位符，默认"共{total}条"
+                        noData: false,//没有数据时是否显示分页，默认false不显示，true显示第一页
+                        showSkip:true,//是否显示跳页，默认关闭：false
+                        showPN:true,//是否显示上下翻页，默认开启：true
+                        prevPage:"上一页",//上翻页文字描述，默认“上一页”
+                        nextPage:"下一页",//下翻页文字描述，默认“下一页”
+                        backFun:function(page){
+                            //点击分页按钮回调函数，返回当前页码
+                            suarch(page);
+                        }
+                    });
+                }
+            })
+        }
+        function selectSize(v) {
+            size=v;
+            suarch(null,size);
+        }
+    </script>
+</head>
+<body class="hold-transition skin-red sidebar-mini">
+<!-- .box-body -->
+<div class="box-header with-border">
+    <h3 class="box-title">品牌管理</h3>
+</div>
+
+<div class="box-body">
+
+    <!-- 数据表格 -->
+    <div class="table-box">
+
+        <!--工具栏-->
+        <div class="pull-left">
+            <div class="form-group form-inline">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" title="新建" data-toggle="modal"
+                            data-target="#editModal"><i class="fa fa-file-o"></i> 新建
+                    </button>
+                    <button type="button" class="btn btn-default" title="删除" onclick="del()"><i class="fa fa-trash-o"></i> 删除</button>
+                    <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
+                            class="fa fa-refresh"></i> 刷新
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="box-tools pull-right">
+            <div class="has-feedback">
+                品牌名称：<input id="searchName"> 品牌首字母：<input id="searchFir">
+                <button class="btn btn-default" onclick="suarch()">查询</button>
+            </div>
+        </div>
+        <!--工具栏/-->
+
+        <!--数据列表-->
+        <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+            <thead>
+            <tr>
+                <th class="" style="padding-right:0px">
+                    <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                </th>
+                <th class="sorting_asc">品牌ID</th>
+                <th class="sorting">品牌名称</th>
+                <th class="sorting">品牌首字母</th>
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody id="data">
+            <tr>
+                <td><input type="checkbox"></td>
+                <td id="num">1</td>
+                <td id="name">联想</td>
+                <td id="fir">L</td>
+                <td class="text-center">
+                    <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal">修改
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <!-- 数据表格 /-->
+    <div class="pull-right">
+        <div class="form-group form-inline">
+            每页
+            <select onchange="selectSize(this.options[this.options.selectedIndex].value)" class="form-control">
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="80">80</option>
+            </select> 条
+        </div>
+    </div>
+    <div id="myPage" class="demo"></div>
+</div>
+<!-- /.box-body -->
+
+<!-- 编辑窗口 -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">品牌编辑</h3>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped" width="800px">
+                    <input type='hidden'  id='id'/>
+                    <tr>
+                        <td>品牌名称</td>
+                        <td><input id="brandname" class="form-control" placeholder="品牌名称"></td>
+                    </tr>
+                    <tr>
+                        <td>首字母</td>
+                        <td><input id="brandfir" class="form-control" placeholder="首字母"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" onclick="seva()">保存</button>
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true" onclick="shutdown()">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
