@@ -22,6 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         com.qul.pojo.User user = userService.findByUsername(username);
         List<GrantedAuthority> list =new ArrayList<>();
+
         list.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         if (user!=null){
             Date date=new Date();
