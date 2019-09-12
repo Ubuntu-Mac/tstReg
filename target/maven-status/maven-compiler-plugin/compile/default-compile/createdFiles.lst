@@ -9,11 +9,11 @@ com\qul\service\ConfigTestService.class
 com\qul\dao\ConfigTsetDao.class
 com\qul\controller\LoginController.class
 com\qul\pojo\Brand.class
-com\qul\service\impl\UserDetailsServiceImpl.class
 com\qul\controller\VersionController.class
 com\qul\result\Result.class
 com\qul\controller\UserController.class
 com\qul\service\impl\UserServiceImpl.class
+com\qul\fiflter\LoginFiflter.class
 com\qul\dao\BrandDao.class
 com\qul\service\impl\BrandServiceImpl.class
 com\qul\pojo\User.class

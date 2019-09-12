@@ -3,6 +3,7 @@ D:\code\testReg\src\main\java\com\qul\controller\LoginController.java
 D:\code\testReg\src\main\java\com\qul\result\Result.java
 D:\code\testReg\src\main\java\com\qul\service\UserService.java
 D:\code\testReg\src\main\java\com\qul\controller\UserController.java
+D:\code\testReg\src\main\java\com\qul\fiflter\LoginFiflter.java
 D:\code\testReg\src\main\java\com\qul\Interceptor\TestInterceptor.java
 D:\code\testReg\src\main\java\com\qul\controller\BrankController.java
 D:\code\testReg\src\main\java\com\qul\dao\UserDao.java
@@ -11,7 +12,6 @@ D:\code\testReg\src\main\java\com\qul\dao\BrandDao.java
 D:\code\testReg\src\main\java\com\qul\quartz\Job2Demo.java
 D:\code\testReg\src\main\java\com\qul\pojo\User.java
 D:\code\testReg\src\main\java\com\qul\service\ConfigTestService.java
-D:\code\testReg\src\main\java\com\qul\service\impl\UserDetailsServiceImpl.java
 D:\code\testReg\src\main\java\com\qul\quartz\Job1Demo.java
 D:\code\testReg\src\main\java\com\qul\service\impl\BrandServiceImpl.java
 D:\code\testReg\src\main\java\com\qul\service\BrandService.java

@@ -4,11 +4,9 @@ import com.qul.pojo.User;
 import com.qul.result.Result;
 import com.qul.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
@@ -18,8 +16,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @RequestMapping("/findAll")
     @ResponseBody
@@ -34,8 +30,6 @@ public class UserController {
         boolean b = checkUsernameIsRepeat(user.getUsername());
         if (b){
             try {
-                String encode = bCryptPasswordEncoder.encode(user.getPassword());
-                user.setPassword(encode);
                 userService.add(user);
                 return new Result(true,"注册成功，请登录邮箱激活");
             } catch (Exception e) {

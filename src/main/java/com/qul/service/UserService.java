@@ -2,6 +2,8 @@ package com.qul.service;
 
 import com.qul.pojo.User;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public interface UserService {
@@ -9,7 +11,7 @@ public interface UserService {
 
     User findOne(int id);
 
-    void add(User user);
+    void add(User user) throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
     boolean checkUsernameIsRepeat(String username);
 
